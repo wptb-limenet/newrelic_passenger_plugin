@@ -2,6 +2,8 @@
 
 A New Relic agent to collect status information from phusion passenger via the xml output of the passenger-status command
 
+NOTE!!! Currently written to support passenger 4, parsing may not work correctly with passenger 3 outputs
+
 ## Passenger Agent Installation
 
 1. Download the latest version
