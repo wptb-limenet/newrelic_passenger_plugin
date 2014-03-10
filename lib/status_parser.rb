@@ -1,4 +1,5 @@
 class Status
+  require 'date'
 
   def initialize(output)
     status_command = output.match(/<.+/m).to_s
@@ -6,11 +7,12 @@ class Status
 
     @status_result = [
       doc.xpath('//info/max').text.to_i,
-      doc.xpath('//info/utilization').text.to_i,
+      doc.xpath('//info/capacity_used').text.to_i,
       doc.xpath('//info/get_wait_list_size').text.to_i,
       parse_sessions(doc),
       parse_cpu(doc),
-      parse_app_memory(doc)
+      parse_app_memory(doc),
+      parse_last_used(doc)
     ]
   end
 
@@ -36,6 +38,10 @@ class Status
 
   def process_memory
     @status_result[5]
+  end
+
+  def last_used_time
+    @status_result[6]
   end
 
   private
@@ -71,6 +77,16 @@ class Status
     processes = Hash.new(0)
     doc.xpath('//process').each do |x|
       processes[name_clean(x.xpath('./command').text)] += x.xpath('./real_memory').text.to_i
+    end
+    processes
+  end
+
+  def parse_last_used(doc)
+    processes = Hash.new(0)
+    doc.xpath('//process').each_with_index do |x, index|
+      unix_stamp = (x.xpath('./last_used').text.to_i / 1000000)
+      elapsed = Time.now.to_i - unix_stamp
+      processes[(index + 1).to_s] = elapsed
     end
     processes
   end

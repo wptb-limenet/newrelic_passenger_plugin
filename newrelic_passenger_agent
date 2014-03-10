@@ -55,6 +55,11 @@ module PassengerAgent
         report_metric "passenger/memory/detail/#{app}", "MB", memory_usage
       end
 
+      # Time since last used, by passenger worker
+      @status.last_used_time.each do |worker_num, time_elapsed|
+        report_metric "passenger/processes/time_since_last_used/#{worker_num}", "s", time_elapsed
+      end
+
     end
 
     private
