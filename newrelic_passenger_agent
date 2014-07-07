@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+#!/opt/chef/embedded/bin/env ruby
 
 # Passenger agent to monitor status and memory status of passenger servers
 
